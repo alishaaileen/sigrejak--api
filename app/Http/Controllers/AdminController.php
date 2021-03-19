@@ -17,7 +17,7 @@ class AdminController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('auth');
+        $this->middleware('auth:admin');
     }
 
     protected static $rule = [

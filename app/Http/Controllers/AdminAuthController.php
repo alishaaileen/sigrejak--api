@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Auth;
+
 class AdminAuthController extends Controller
 {
     public function login(Request $request)
@@ -17,7 +21,7 @@ class AdminAuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         try {
-            if (!$token = JWTAuth::attempt($credentials)) {
+            if (!$token = Auth::guard('admin')->attempt($credentials)) {
                 return response()->json(['message' => 'Invalid email or password'], 400);
             }
         } catch (JWTException $e) {

@@ -13,7 +13,8 @@
 |
 */
 
-use App\Http\Controllers\Auth\AdminAuthController;
+// use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\Auth\UserAuthController;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -23,7 +24,7 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     // **************************
     // KELUARGA
     // **************************
-    Route::post('login', 'Auth\UserAuthController@login');
+    Route::post('login', [UserAuthController::class,'login']);
     Route::group(['prefix' => 'keluarga'], function () use ($router) {
         Route::get('/trash', 'KeluargaController@trash');
         Route::get('/profile', 'KeluargaController@profile');
@@ -37,12 +38,13 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     // **************************
     // ADMIN
     // **************************
-    Route::post('login-admin', [AdminAuthController::class, 'login']);
-    Route::group(['prefix' => 'admin'], function () use ($router) {
-        Route::get('/profile', 'AdminController@profile');
-        Route::get('/', ['middleware' => 'admin'], 'AdminController@index');
+    Route::post('login-admin', 'AdminAuthController@login');
+    Route::group(['prefix' => 'admin',], function () use ($router) {
+        $router->get('/', 'AdminController@index');
+        // Route::get('/profile', 'AdminController@profile')->middleware(['assign.guard:superAdmin, romo, sekretariat','jwt.auth']);
+        // Route::get('/', 'AdminController@index')->middleware(['assign.guard:superAdmin, romo, sekretariat','jwt.auth']);
         Route::get('/{id}', 'AdminController@show');
-        Route::post('register', ['middleware' => 'admin'], 'AdminController@store');
+        Route::post('register', ['middleware' => 'admin', 'jwt.auth'], 'AdminController@store');
         Route::put('/{id}', 'AdminController@update');
         Route::delete('/{id}', 'AdminController@destroy');
     });

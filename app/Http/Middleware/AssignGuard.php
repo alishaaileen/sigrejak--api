@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class SekretariatMiddleware
+class AssignGuard
 {
     /**
      * Handle an incoming request.
@@ -13,20 +13,15 @@ class SekretariatMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
         // Pre-Middleware Action
 
-        $admin = JWTAuth::user();
-
-        if ($admin->role != "Sekretariat" || $admin->role != "SU") {
-            return response([
-                'message' => 'You do not have access'
-            ], 403);
-        }
-
         $response = $next($request);
 
+        if($guard != null) {
+            auth()->shouldUse($guard);
+        }
         // Post-Middleware Action
 
         return $response;
