@@ -11,6 +11,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+        'keluarga' => [
+            'driver' => 'jwt',
+            'provider' => 'keluarga',
+        ],
         'admin' => [
             'driver' => 'jwt',
             'provider' => 'admins',
@@ -19,6 +23,10 @@ return [
 
     'providers' => [
         'users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\Keluarga::class
+        ],
+        'keluarga' => [
             'driver' => 'eloquent',
             'model' => \App\Models\Keluarga::class
         ],

@@ -14,7 +14,7 @@
 */
 
 // use App\Http\Controllers\Auth\AdminAuthController;
-use App\Http\Controllers\Auth\UserAuthController;
+// use App\Http\Controllers\Auth\UserAuthController;
 
 $router->get('/', function () use ($router) {
     return $router->app->version();
@@ -24,7 +24,7 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     // **************************
     // KELUARGA
     // **************************
-    Route::post('login', [UserAuthController::class,'login']);
+    Route::post('login', 'KeluargaAuthController@login');
     Route::group(['prefix' => 'keluarga'], function () use ($router) {
         Route::get('/trash', 'KeluargaController@trash');
         Route::get('/profile', 'KeluargaController@profile');

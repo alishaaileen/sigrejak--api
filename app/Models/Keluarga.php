@@ -17,6 +17,8 @@ class Keluarga extends Model implements AuthenticatableContract, AuthorizableCon
 
     protected $table = 'Keluarga';
 
+    protected $guard = 'keluarga';
+
     protected $dates = ['deleted_at'];
 
     protected $fillable = [

@@ -11,7 +11,7 @@ class LingkunganController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('auth');
+        $this->middleware('role.auth:admins,keluarga');
     }
     
     protected static $rule = [

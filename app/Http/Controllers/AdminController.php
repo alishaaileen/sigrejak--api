@@ -17,7 +17,7 @@ class AdminController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('auth:admin');
+        $this->middleware('role.auth:admins');
     }
 
     protected static $rule = [
@@ -30,7 +30,8 @@ class AdminController extends Controller
     public function index() {
         $admin = JWTAuth::user();
 
-        if ($admin->role === "sekretariat") {
+        if ($admin->role === "sekretariat" ||
+            $admin->role === "su") {
 
             try{
                 $admin = Admin::all();
