@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Paroki;
+use App\Models\Paroki;
 use Illuminate\Http\Request;
 
 class ParokiController extends Controller
 {
-    public function __construct()
-    {
-        // Gunanya biar semua request di controller ini
-        // Harus sudah login
-        $this->middleware('role.auth:admins,keluarga');
-    }
+    // public function __construct()
+    // {
+    //     // Gunanya biar semua request di controller ini
+    //     // Harus sudah login
+    //     $this->middleware('role.auth:admins,keluarga');
+    // }
     
     protected static $rule = [
         'nama_paroki' => 'required',
@@ -94,7 +94,7 @@ class ParokiController extends Controller
      * @param  \App\Paroki  $paroki
      * @return \Illuminate\Http\Response
      */
-    public function show(Paroki $paroki)
+    public function show($id)
     {
         try {
             $paroki = Paroki::find($id);
@@ -105,8 +105,8 @@ class ParokiController extends Controller
                 ], 404);
             } else {
                 return response()->json([
-                'message' => 'Successfully retrieved',
-                'paroki' => $paroki
+                    'paroki' => $paroki,
+                    'message' => 'Successfully retrieved'
             ], 200);
             }
         } catch (\Exception $e) {
@@ -134,7 +134,7 @@ class ParokiController extends Controller
      * @param  \App\Paroki  $paroki
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Paroki $paroki)
+    public function update(Request $request, $id)
     {
         $paroki = Paroki::find($id);
 
@@ -171,7 +171,7 @@ class ParokiController extends Controller
      * @param  \App\Paroki  $paroki
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Paroki $paroki)
+    public function destroy($id)
     {
         $paroki = Paroki::find($id);
         

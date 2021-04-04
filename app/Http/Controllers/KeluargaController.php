@@ -18,7 +18,7 @@ class KeluargaController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('role.auth:admins|keluarga');
+        // $this->middleware('role.auth:admins|keluarga');
     }
 
     protected static $rule = [
@@ -184,6 +184,27 @@ class KeluargaController extends Controller
                 ], 200);
             }
         } catch (\Illuminate\Database\QueryException $e) {
+            return response([
+                'message' => $e,
+            ], 500);
+        }
+    }
+
+    public function getAllFamilyMember($idKeluarga) {
+        try {
+            $familyMembers = Keluarga::find($idKeluarga)->getAllFamilyMember;
+            
+            if ($familyMembers === null) {
+                return response()->json([
+                    'message' => 'No family member found',
+                ], 404);
+            } else {
+                return response()->json([
+                'message' => 'Successfully retrieved',
+                'familyMembers' => $familyMembers
+            ], 200);
+            }
+        } catch (\Exception $e) {
             return response([
                 'message' => $e,
             ], 500);

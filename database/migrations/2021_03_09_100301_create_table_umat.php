@@ -26,12 +26,12 @@ class CreateTableUmat extends Migration
             $table->integer('status_meninggal');
             $table->integer('status_umat_aktif');
             
-            $table->integer('id_keluarga')->unsigned();
-            $table->integer('id_lingkungan')->unsigned();
-            $table->integer('id_paroki')->unsigned();
-            $table->foreign('id_keluarga')->references('id')->on('Umat');
-            $table->foreign('id_lingkungan')->references('id')->on('Lingkungan');
-            $table->foreign('id_paroki')->references('id')->on('Paroki');
+            $table->integer('keluarga_id')->unsigned();
+            $table->integer('lingkungan_id')->unsigned()->nullable();
+            $table->integer('paroki_id')->unsigned()->nullable();
+            $table->foreign('keluarga_id')->references('id')->on('Umat');
+            $table->foreign('lingkungan_id')->references('id')->on('Lingkungan');
+            $table->foreign('paroki_id')->references('id')->on('Paroki');
 
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();

@@ -33,6 +33,7 @@ Route::group(['prefix' => 'api'], function () use ($router) {
         Route::post('register', 'KeluargaController@store');
         Route::put('/{id}', 'KeluargaController@update');
         Route::delete('/{id}', 'KeluargaController@destroy');
+        Route::get('/anggota/{idKeluarga}', 'KeluargaController@getAllFamilyMember');
     });
 
     // **************************
@@ -41,8 +42,8 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     Route::post('login-admin', 'AdminAuthController@login');
     Route::group(['prefix' => 'admin',], function () use ($router) {
         $router->get('/', 'AdminController@index');
-        // Route::get('/profile', 'AdminController@profile')->middleware(['assign.guard:superAdmin, romo, sekretariat','jwt.auth']);
-        // Route::get('/', 'AdminController@index')->middleware(['assign.guard:superAdmin, romo, sekretariat','jwt.auth']);
+        Route::get('/profile', 'AdminController@profile');
+        // Route::get('/', 'AdminController@index')->middleware(['role.auth:admin','jwt.auth']);
         Route::get('/{id}', 'AdminController@show');
         Route::post('register', ['middleware' => 'admin', 'jwt.auth'], 'AdminController@store');
         Route::put('/{id}', 'AdminController@update');
@@ -69,5 +70,16 @@ Route::group(['prefix' => 'api'], function () use ($router) {
         Route::post('store', 'LingkunganController@store');
         Route::put('/{id}', 'LingkunganController@update');
         Route::delete('/{id}', 'LingkunganController@destroy');
+    });
+
+    // **************************
+    // UMAT
+    // **************************
+    Route::group(['prefix' => 'umat'], function () use ($router) {
+        Route::get('/', 'UmatController@index');
+        Route::get('/{id}', 'UmatController@show');
+        Route::post('store', 'UmatController@store');
+        Route::put('/{id}', 'UmatController@update');
+        Route::delete('/{id}', 'UmatController@destroy');
     });
 });

@@ -48,4 +48,9 @@ class Keluarga extends Model implements AuthenticatableContract, AuthorizableCon
     {
         return [];
     }
+
+    public function getAllFamilyMember()
+    {
+        return $this->hasMany(Umat::class);
+    }
 }

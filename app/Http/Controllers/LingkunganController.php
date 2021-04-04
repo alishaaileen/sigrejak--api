@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Lingkungan;
+use App\Models\Lingkungan;
 use Illuminate\Http\Request;
 
 class LingkunganController extends Controller
