@@ -17,7 +17,7 @@ class AdminController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('role.auth:admins');
+        // $this->middleware('role.auth:admins');
     }
 
     protected static $rule = [
@@ -28,35 +28,72 @@ class AdminController extends Controller
     ];
 
     public function index() {
-        $admin = JWTAuth::user();
+        try{
+            $admin = Admin::all();
 
-        if ($admin->role === "sekretariat" ||
-            $admin->role === "su") {
-
-            try{
-                $admin = Admin::all();
-
-                if (sizeof($admin) == 0) {
-                    return response([
-                        'message' => 'data is empty',
-                        'data' => [],
-                    ], 200);
-                } else {
-                    return response([
-                        'message' => 'successfully retrieved',
-                        'data' => $admin,
-                    ], 200);
-                }
-            } catch (\Illuminate\Database\QueryException $e){
+            if (sizeof($admin) == 0) {
                 return response([
-                    'message' => $e,
-                ], 500);
+                    'message' => 'data is empty',
+                    'data' => [],
+                ], 200);
+            } else {
+                return response([
+                    'message' => 'successfully retrieved',
+                    'data' => $admin,
+                ], 200);
             }
-        } else {
+        } catch (\Illuminate\Database\QueryException $e){
             return response([
-                'message' => 'Not an admin',
-            ], 403);
+                'message' => $e,
+            ], 500);
         }
+        
+    }
+
+    public function getSekretariat() {
+        try{
+            $admin = Admin::where('role', "Sekretariat")->get();
+
+            if (sizeof($admin) == 0) {
+                return response([
+                    'message' => 'data is empty',
+                    'data' => [],
+                ], 200);
+            } else {
+                return response([
+                    'message' => 'successfully retrieved',
+                    'data' => $admin,
+                ], 200);
+            }
+        } catch (\Illuminate\Database\QueryException $e){
+            return response([
+                'message' => $e,
+            ], 500);
+        }
+        
+    }
+
+    public function getRomo() {
+        try{
+            $admin = Admin::where('role', "Romo")->get();
+
+            if (sizeof($admin) == 0) {
+                return response([
+                    'message' => 'data is empty',
+                    'data' => [],
+                ], 200);
+            } else {
+                return response([
+                    'message' => 'successfully retrieved',
+                    'data' => $admin,
+                ], 200);
+            }
+        } catch (\Illuminate\Database\QueryException $e){
+            return response([
+                'message' => $e,
+            ], 500);
+        }
+        
     }
 
     public function show($id)
@@ -71,7 +108,7 @@ class AdminController extends Controller
             } else {
                 return response()->json([
                 'message' => 'Successfully retrieved',
-                'admin' => $admin
+                'data' => $admin
             ], 200);
             }
         } catch (\Exception $e) {
@@ -98,7 +135,7 @@ class AdminController extends Controller
 
             $admin->save();
             return response([
-                'admin' => $keluarga,
+                'result' => $admin,
                 'message' => 'Registered successfully'
             ], 201);
 

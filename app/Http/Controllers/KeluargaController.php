@@ -63,7 +63,7 @@ class KeluargaController extends Controller
             } else {
                 return response()->json([
                 'message' => 'Successfully retrieved',
-                'keluarga' => $keluarga
+                'data' => $keluarga
             ], 200);
             }
         } catch (\Exception $e) {
@@ -94,7 +94,7 @@ class KeluargaController extends Controller
 
             $keluarga->save();
             return response([
-                'keluarga' => $keluarga,
+                'result' => $keluarga,
                 'message' => 'Registered successfully'
             ], 201);
 
@@ -201,7 +201,7 @@ class KeluargaController extends Controller
             } else {
                 return response()->json([
                 'message' => 'Successfully retrieved',
-                'familyMembers' => $familyMembers
+                'data' => $familyMembers
             ], 200);
             }
         } catch (\Exception $e) {

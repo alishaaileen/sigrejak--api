@@ -94,7 +94,7 @@ class UmatController extends Controller
             $umat->save();
             return response([
                 'message' => 'Registered successfully',
-                'umat' => $umat,
+                'result' => $umat,
             ], 201);
 
         } catch (\Exception $e) {
@@ -123,7 +123,7 @@ class UmatController extends Controller
             } else {
                 return response()->json([
                     'message' => 'Successfully retrieved',
-                    'umat' => $umat,
+                    'data' => $umat,
             ], 200);
             }
         } catch (\Exception $e) {
@@ -173,11 +173,6 @@ class UmatController extends Controller
             $umat->lingkungan_id = $request->lingkungan_id;
             $umat->paroki_id = $request->paroki_id;
             $umat->keluarga_id = $request->keluarga_id;
-            // if ($paroki->id_romo_paroki === "") {
-            //     $paroki->id_romo_paroki = null;
-            // } else {
-            //     $paroki->id_romo_paroki = $request->id_romo_paroki;
-            // }
             $umat->updated_at = Carbon::now();
 
             try {

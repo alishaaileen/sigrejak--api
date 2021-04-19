@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Keluarga;
 
-class DatabaseSeeder extends Seeder
+class KeluargaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,7 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call('KeluargaSeeder');
-        $this->call('UmatSeeder');
+        Keluarga::factory()
+            ->count(3)
+            ->create();
     }
 }

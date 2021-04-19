@@ -42,10 +42,13 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     Route::post('login-admin', 'AdminAuthController@login');
     Route::group(['prefix' => 'admin',], function () use ($router) {
         $router->get('/', 'AdminController@index');
+        $router->get('/sekretariat', 'AdminController@getSekretariat');
+        $router->get('/romo', 'AdminController@getRomo');
         Route::get('/profile', 'AdminController@profile');
         // Route::get('/', 'AdminController@index')->middleware(['role.auth:admin','jwt.auth']);
         Route::get('/{id}', 'AdminController@show');
-        Route::post('register', ['middleware' => 'admin', 'jwt.auth'], 'AdminController@store');
+        // Route::post('register', ['middleware' => 'admin', 'jwt.auth'], 'AdminController@store');
+        Route::post('register', 'AdminController@store');
         Route::put('/{id}', 'AdminController@update');
         Route::delete('/{id}', 'AdminController@destroy');
     });
@@ -81,5 +84,16 @@ Route::group(['prefix' => 'api'], function () use ($router) {
         Route::post('store', 'UmatController@store');
         Route::put('/{id}', 'UmatController@update');
         Route::delete('/{id}', 'UmatController@destroy');
+    });
+
+    // **************************
+    // DETAIL UMAT
+    // **************************
+    Route::group(['prefix' => 'detail-umat'], function () use ($router) {
+        // Route::get('/', 'UmatController@index');
+        Route::get('/{id}', 'DetailUmatController@show');
+        Route::post('store', 'DetailUmatController@store');
+        Route::put('/{id}', 'DetailUmatController@update');
+        // Route::delete('/{id}', 'UmatController@destroy');
     });
 });

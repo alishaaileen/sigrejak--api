@@ -11,6 +11,6 @@ class Lingkungan extends Model
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
-        'nama_lingkungan', 'id_ketua_lingkungan',
+        'nama_lingkungan', 'id_ketua_lingkungan', 'paroki_id'
     ];
 }

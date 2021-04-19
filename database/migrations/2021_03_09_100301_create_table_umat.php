@@ -29,7 +29,7 @@ class CreateTableUmat extends Migration
             $table->integer('keluarga_id')->unsigned();
             $table->integer('lingkungan_id')->unsigned()->nullable();
             $table->integer('paroki_id')->unsigned()->nullable();
-            $table->foreign('keluarga_id')->references('id')->on('Umat');
+            $table->foreign('keluarga_id')->references('id')->on('Keluarga');
             $table->foreign('lingkungan_id')->references('id')->on('Lingkungan');
             $table->foreign('paroki_id')->references('id')->on('Paroki');
 

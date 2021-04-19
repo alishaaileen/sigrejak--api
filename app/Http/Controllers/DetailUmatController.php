@@ -2,23 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Paroki;
+use App\Models\DetailUmat;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
-class ParokiController extends Controller
+class DetailUmatController extends Controller
 {
-    // public function __construct()
-    // {
-    //     // Gunanya biar semua request di controller ini
-    //     // Harus sudah login
-    //     $this->middleware('role.auth:admins,keluarga');
-    // }
-    
     protected static $rule = [
-        'nama_paroki' => 'required',
+        'id_umat' => 'required|unique:Detail_Umat',
     ];
-
     /**
      * Display a listing of the resource.
      *
@@ -27,9 +18,9 @@ class ParokiController extends Controller
     public function index()
     {
         try{
-            $paroki = Paroki::all();
+            $detail = DetailUmat::all();
 
-            if (sizeof($paroki) == 0) {
+            if (sizeof($detail) == 0) {
                 return response([
                     'message' => 'data is empty',
                     'data' => [],
@@ -37,7 +28,7 @@ class ParokiController extends Controller
             } else {
                 return response([
                     'message' => 'successfully retrieved',
-                    'data' => $paroki,
+                    'data' => $detail,
                 ], 200);
             }
         } catch (\Illuminate\Database\QueryException $e){
@@ -68,17 +59,20 @@ class ParokiController extends Controller
         $this->validate($request, self::$rule);
 
         try {
-            $paroki = new Paroki;
-            $paroki->nama_paroki = $request->input('nama_paroki');
-            $paroki->id_romo_paroki = $request->id_romo_paroki === "" 
-                ? null
-                : $request->id_romo_paroki;
-            $paroki->created_at = Carbon::now();
+            $detail = new DetailUmat;
+            $detail->id_umat = $request->input('id_umat');
+            $detail->tgl_baptis = $request->input('tgl_baptis');
+            $detail->tgl_komuni = $request->input('tgl_komuni');
+            $detail->tgl_penguatan = $request->input('tgl_penguatan');
+            $detail->cara_menikah = $request->input('cara_menikah');
+            $detail->tgl_menikah = $request->input('tgl_menikah');
+            $detail->file_akta_lahir = $request->input('file_akta_lahir');
+            $detail->file_ktp = $request->input('file_ktp');
 
-            $paroki->save();
+            $detail->save();
             return response([
-                'data' => $paroki,
-                'message' => 'Registered successfully'
+                'message' => 'Registered successfully',
+                'result' => $detail,
             ], 201);
 
         } catch (\Exception $e) {
@@ -92,22 +86,22 @@ class ParokiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Paroki  $paroki
+     * @param  \App\DetailUmat  $detailUmat
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         try {
-            $paroki = Paroki::find($id);
+            $detail = DetailUmat::find($id);
             
-            if ($paroki === null) {
+            if ($detail === null) {
                 return response()->json([
                     'message' => 'Not found',
                 ], 404);
             } else {
                 return response()->json([
-                    'data' => $paroki,
-                    'message' => 'Successfully retrieved'
+                    'message' => 'Successfully retrieved',
+                    'data' => $detail,
             ], 200);
             }
         } catch (\Exception $e) {
@@ -120,10 +114,10 @@ class ParokiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Paroki  $paroki
+     * @param  \App\DetailUmat  $detailUmat
      * @return \Illuminate\Http\Response
      */
-    public function edit(Paroki $paroki)
+    public function edit(DetailUmat $detailUmat)
     {
         //
     }
@@ -132,31 +126,32 @@ class ParokiController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Paroki  $paroki
+     * @param  \App\DetailUmat  $detailUmat
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $paroki = Paroki::find($id);
+        $detail = Umat::find($id);
 
-        if ($paroki === null) {
+        if ($detail === null) {
             return response([
                 'message' => 'Not found',
             ], 404);
         } else {
-            $paroki->nama_paroki = $request->nama_paroki;
-            if ($paroki->id_romo_paroki === "") {
-                $paroki->id_romo_paroki = null;
-            } else {
-                $paroki->id_romo_paroki = $request->id_romo_paroki;
-            }
-            $paroki->updated_at = Carbon::now();
+            $detail->id_umat = $request->id_umat;
+            $detail->tgl_baptis = $request->tgl_baptis;
+            $detail->tgl_komuni = $request->tgl_komuni;
+            $detail->tgl_penguatan = $request->tgl_penguatan;
+            $detail->cara_menikah = $request->cara_menikah;
+            $detail->tgl_menikah = $request->tgl_menikah;
+            $detail->file_akta_lahir = $request->file_akta_lahir;
+            $detail->file_ktp = $request->file_ktp;
 
             try {
-                $update = $paroki->save();
+                $update = $detail->save();
                 return response([
-                    'message' => 'Updated successfully',
-                    'result' => $paroki
+                    'result' => $detail,
+                    'message' => 'Updated successfully'
                 ], 200);
             } catch (\Illuminate\Database\QueryException $e) {
                 return response([
@@ -169,29 +164,29 @@ class ParokiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Paroki  $paroki
+     * @param  \App\DetailUmat  $detailUmat
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $paroki = Paroki::find($id);
+        // $detail = DetailUmat::find($id);
         
-        if ($paroki === null) {
-            return response([
-                'message' => 'not found'
-            ], 404);
-        } else {
-            try {
-                $paroki->delete();
+        // if ($detail === null) {
+        //     return response([
+        //         'message' => 'not found'
+        //     ], 404);
+        // } else {
+        //     try {
+        //         $detail->delete();
 
-                return response([
-                    'message' => 'Deleted successfully',
-                ], 200);
-            } catch (\Illuminate\Database\QueryException $e) {
-                return response([
-                    'message' => $e,
-                ], 500);
-            }
-        }
+        //         return response([
+        //             'message' => 'Deleted successfully',
+        //         ], 200);
+        //     } catch (\Illuminate\Database\QueryException $e) {
+        //         return response([
+        //             'message' => $e,
+        //         ], 500);
+        //     }
+        // }
     }
 }

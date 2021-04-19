@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lingkungan;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class LingkunganController extends Controller
 {
@@ -11,11 +12,12 @@ class LingkunganController extends Controller
     {
         // Gunanya biar semua request di controller ini
         // Harus sudah login
-        $this->middleware('role.auth:admins,keluarga');
+        // $this->middleware('role.auth:admins,keluarga');
     }
     
     protected static $rule = [
         'nama_lingkungan' => 'required',
+        'paroki_id' => 'required'
     ];
 
     /**
@@ -69,6 +71,7 @@ class LingkunganController extends Controller
         try {
             $lingkungan = new Lingkungan;
             $lingkungan->nama_lingkungan = $request->input('nama_lingkungan');
+            $lingkungan->paroki_id = $request->input('paroki_id');
             $lingkungan->id_ketua_lingkungan = $request->input('id_ketua_lingkungan') === "" 
                 ? null
                 : $request->id_ketua_lingkungan;
@@ -76,7 +79,7 @@ class LingkunganController extends Controller
 
             $lingkungan->save();
             return response([
-                'lingkungan' => $lingkungan,
+                'data' => $lingkungan,
                 'message' => 'Registered successfully'
             ], 201);
 
@@ -106,7 +109,7 @@ class LingkunganController extends Controller
             } else {
                 return response()->json([
                 'message' => 'Successfully retrieved',
-                'lingkungan' => $lingkungan
+                'data' => $lingkungan
             ], 200);
             }
         } catch (\Exception $e) {
@@ -144,6 +147,7 @@ class LingkunganController extends Controller
             ], 404);
         } else {
             $lingkungan->nama_ketua_lingkungan = $request->nama_ketua_lingkungan;
+            $lingkungan->paroki_id = $request->paroki_id;
             if ($request->nama_ketua_lingkungan === "") {
                 $lingkungan->nama_ketua_lingkungan = null;
             } else {
@@ -171,7 +175,7 @@ class LingkunganController extends Controller
      * @param  \App\Lingkungan  $lingkungan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Lingkungan $lingkungan)
+    public function destroy($id)
     {
         $lingkungan = Lingkungan::find($id);
         

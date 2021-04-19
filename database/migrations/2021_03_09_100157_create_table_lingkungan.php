@@ -17,7 +17,9 @@ class CreateTableLingkungan extends Migration
             $table->increments('id');
             $table->string('nama_lingkungan');
             $table->integer('id_ketua_lingkungan')->unsigned();
+            $table->integer('paroki_id')->unsigned();
             $table->foreign('id_ketua_lingkungan')->references('id')->on('Keluarga');
+            $table->foreign('paroki_id')->references('id')->on('Paroki');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
