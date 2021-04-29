@@ -15,6 +15,10 @@ class Admin extends Model implements AuthenticatableContract, AuthorizableContra
 
     protected $table = 'Admin';
 
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
     protected $guard = 'admins';
 
     protected $dates = ['deleted_at'];

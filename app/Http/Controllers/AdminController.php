@@ -10,6 +10,8 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Illuminate\Support\Facades\Mail;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class AdminController extends Controller
 {
@@ -133,18 +135,40 @@ class AdminController extends Controller
             $admin->role = $request->input('role');
             $admin->created_at = Carbon::now();
 
+            if($request->input('role') === 'Sekretariat') {
+                $admin->id = IdGenerator::generate(['table' => 'Admin', 'length' => 10, 'prefix' =>'SKT-']);
+            } else if($request->input('role') === 'Romo'){
+                $admin->id = IdGenerator::generate(['table' => 'Admin', 'length' => 10, 'prefix' =>'ROM-']);
+            } else if($request->input('role') === 'SU'){
+                $admin->id = IdGenerator::generate(['table' => 'Admin', 'length' => 10, 'prefix' =>'SU-']);
+            }
+            
+            $data = array(
+                'nama' => $request->input('nama'),
+                'role' => $request->input('role'),
+                'password' => $request->input('password'),
+            );
+
             $admin->save();
             return response([
                 'result' => $admin,
                 'message' => 'Registered successfully'
             ], 201);
-
         } catch (\Exception $e) {
             return response([
                 'message' => 'Registration Failed!',
                 'error' => $e
             ], 409);
         }
+    }
+
+    public function sendEmail($personData) {
+        // Mail::to(request('NewAdminMail'))->send(new AdminAccount());
+        
+        Mail::send('NewAdminMail', $personData, function($message) {
+            $message
+                ->to($request->input('email'), $request->input('nama'));
+        });
     }
 
     public function profile()

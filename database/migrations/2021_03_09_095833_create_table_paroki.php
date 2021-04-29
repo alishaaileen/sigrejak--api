@@ -16,10 +16,14 @@ class CreateTableParoki extends Migration
         Schema::create('Paroki', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nama_paroki');
-            $table->integer('id_romo_paroki')->unsigned()->nullable();
-            $table->foreign('id_romo_paroki')->references('id')->on('Admin');
+            $table->string('id_romo_paroki', 10)->nullable();
+            // $table->foreign('id_romo_paroki')->references('id')->on('Admin');
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
+        });
+
+        Schema::table('Paroki', function($table) {
+            $table->foreign('id_romo_paroki')->references('id')->on('Admin');
         });
     }
 

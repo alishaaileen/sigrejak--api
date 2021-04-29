@@ -13,4 +13,8 @@ class Paroki extends Model
     protected $fillable = [
         'nama_paroki', 'id_romo_paroki',
     ];
+
+    public function romo(){
+        return $this->belongsTo('Admin', 'id_romo_paroki');
+    }
 }
