@@ -16,9 +16,9 @@ class AdminAccount extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($personData)
     {
-        //
+        $this->personData = $personData;
     }
 
     /**
@@ -28,8 +28,9 @@ class AdminAccount extends Mailable
      */
     public function build()
     {
-        return $this
-            ->view('emails.NewAdminMail')
-            ->subject('Akun Gereja Kumetiran Yogyakarta');;
+        return $this->from('noreply@gerejakumetiran.co.id')
+            ->view('NewAdminMail')
+            ->subject('Akun Gereja Kumetiran Yogyakarta')
+            ->with($personData);
     }
 }

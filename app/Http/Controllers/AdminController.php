@@ -12,6 +12,8 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Illuminate\Support\Facades\Mail;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Support\Str;
+use App\Mail\AdminAccount;
 
 class AdminController extends Controller
 {
@@ -25,7 +27,7 @@ class AdminController extends Controller
     protected static $rule = [
         'nama' => 'required',
         'email' => 'required|email|unique:Admin',
-        'password' => 'required',
+        // 'password' => 'required',
         'role' => 'required'
     ];
 
@@ -130,7 +132,7 @@ class AdminController extends Controller
             $admin = new Admin;
             $admin->nama = $request->input('nama');
             $admin->email = $request->input('email');
-            $plainPassword = $request->input('password');
+            $plainPassword = Str::random(10);
             $admin->password = Hash::make($plainPassword);
             $admin->role = $request->input('role');
             $admin->created_at = Carbon::now();
@@ -146,12 +148,13 @@ class AdminController extends Controller
             $data = array(
                 'nama' => $request->input('nama'),
                 'role' => $request->input('role'),
-                'password' => $request->input('password'),
+                'password' => $plainPassword,
             );
+
+            $this->sendEmail($data);
 
             $admin->save();
 
-            // $this->sendEmail($data);
             return response([
                 'result' => $admin,
                 'message' => 'Registered successfully'
@@ -164,13 +167,28 @@ class AdminController extends Controller
         }
     }
 
-    public function sendEmail($personData) {
-        // Mail::to(request('NewAdminMail'))->send(new AdminAccount());
+    public function sendEmail() {
+        $personData = [
+            'nama' => "Aileen",
+            'role' => "Pngemis",
+            'password' => "bruh",
+        ];
         
-        Mail::send('NewAdminMail', $personData, function($message) {
-            $message
-                ->to($request->input('email'), $request->input('nama'));
-        });
+        // try {
+            $send = Mail::to('alishaileen05@gmail.com')->send(new AdminAccount($personData));
+            // Mail::send('NewAdminMail', $personData, function($message) {
+            //     $message
+            //         ->to($request->input('email'), $request->input('nama'));
+            // });
+            if($send) {
+                echo("Email is Sent.");
+            }
+        // } catch (\Exception $e) {
+        //     return response([
+        //         'message' => 'Email not sent!',
+        //         'error' => $e
+        //     ], 409);
+        // }
     }
 
     public function profile($id)

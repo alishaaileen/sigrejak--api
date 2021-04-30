@@ -41,6 +41,7 @@ Route::group(['prefix' => 'api'], function () use ($router) {
     // **************************
     Route::post('login-admin', 'AdminAuthController@login');
     Route::group(['prefix' => 'admin',], function () use ($router) {
+        Route::get('/sendEmail', 'AdminController@sendEmail');
         $router->get('/', 'AdminController@index');
         $router->get('/sekretariat', 'AdminController@getSekretariat');
         $router->get('/romo', 'AdminController@getRomo');
