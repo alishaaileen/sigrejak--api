@@ -150,6 +150,8 @@ class AdminController extends Controller
             );
 
             $admin->save();
+
+            // $this->sendEmail($data);
             return response([
                 'result' => $admin,
                 'message' => 'Registered successfully'
@@ -171,12 +173,19 @@ class AdminController extends Controller
         });
     }
 
-    public function profile()
+    public function profile($id)
     {
-        return response()->json([
-            'message' => 'Successfully retrieved',
-            'admin' => JWTAuth::user()
-        ], 200);
+        $admin = Admin::find($id);
+
+        return response([
+            'message' => 'Retrieved',
+            'admin' => $admin,
+        ], 404);
+
+        // return response()->json([
+        //     'message' => 'Successfully retrieved',
+        //     'admin' => JWTAuth::user()
+        // ], 200);
     }
 
     public function update(Request $request, $id) {

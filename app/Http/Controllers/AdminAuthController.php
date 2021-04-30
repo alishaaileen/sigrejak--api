@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Models\Admin;
 use Auth;
 
 class AdminAuthController extends Controller
@@ -19,7 +20,10 @@ class AdminAuthController extends Controller
         ]);
 
         $credentials = $request->only(['email', 'password']);
-
+        
+        // $admin = Admin::where('email', $request->email)->first();
+        $admin = Admin::select('nama', 'email', 'role')->where('email', $request->email)->first();
+        
         try {
             if (!$token = Auth::guard('admin')->attempt($credentials)) {
                 return response()->json(['message' => 'Invalid email or password'], 400);
@@ -28,6 +32,13 @@ class AdminAuthController extends Controller
             return response()->json(['message' => 'Cannot create token'], 500);
         }
 
-        return $this->respondWithToken($token);
+        $admin->token = $token;
+
+        // return $this->respondWithToken($token);
+        return response()->json([
+            'message' => 'sukses login',
+            'admin' => $admin,
+        ]);
+
     }
 }

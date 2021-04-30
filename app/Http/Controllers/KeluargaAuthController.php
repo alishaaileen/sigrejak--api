@@ -21,7 +21,7 @@ class KeluargaAuthController extends Controller
 
         try {
             if (!$token = Auth::guard('keluarga')->attempt($credentials)) {
-                return response()->json(['message' => 'Invalid email or password'], 400);
+                return response()->json(['message' => 'Invalid username or password'], 400);
             }
         } catch (JWTException $e) {
             return response()->json(['message' => 'Cannot create token'], 500);
